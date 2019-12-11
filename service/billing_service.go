@@ -13,6 +13,9 @@ type billingService struct {
 	billingMongoStore *datastore.BillingMongoStore
 }
 
-func NewBillingService(config *config.GeneralConfig, billingMongoStore *datastore.BillingMongoStore) {
-
+func NewBillingService(config *config.GeneralConfig, billingMongoStore *datastore.BillingMongoStore) BillingService {
+	return &billingService{
+		config,
+		billingMongoStore,
+	}
 }

@@ -38,7 +38,7 @@ func InitializeLogger(config *config.GeneralConfig) {
 			Hooks:     make(logrus.LevelHooks),
 			Level:     l}
 	}
-	Logger.Info("initialized Logger successfully")
+	Logger.Info("Initialized PW Logger successfully")
 }
 
 func SetLogLevel(loglevel string, logger *logrus.Logger) {

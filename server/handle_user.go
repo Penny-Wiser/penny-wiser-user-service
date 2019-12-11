@@ -1,6 +1,8 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (s *server) handleUserRegister() http.HandlerFunc {
 

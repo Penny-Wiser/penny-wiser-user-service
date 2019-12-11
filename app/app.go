@@ -21,10 +21,8 @@ type UserServiceApplication struct {
 }
 
 func New() AppInterface {
-
 	generalConfig := config.LoadConfig()
-	r := server.NewRouter()
-
+	r := server.New()
 	logging.InitializeLogger(generalConfig)
 
 	return &UserServiceApplication{
@@ -33,14 +31,14 @@ func New() AppInterface {
 	}
 }
 
-// Init injects all dependencies and starts all services
 func (app *UserServiceApplication) Init() error {
-
+	logging.Logger.Info("Started dependency injection...")
+	app.startDependencyInjection()
 	return nil
 }
 
 // Start starts the http server listening on port serverPort
 func (app *UserServiceApplication) Start(serverPort string) error {
-
-	return http.ListenAndServe(":"+serverPort, app.server.GetRouter())
+	logging.Logger.Infof("Started user service on port %s", serverPort)
+	return http.ListenAndServe(":"+serverPort, app.server.GetServer())
 }

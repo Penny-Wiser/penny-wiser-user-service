@@ -3,24 +3,27 @@ package svccontainer
 import (
 	"github.com/chenlu-chua/penny-wiser/user-service/config"
 	"github.com/chenlu-chua/penny-wiser/user-service/datastore"
+	"github.com/chenlu-chua/penny-wiser/user-service/service"
 )
 
 type DIServiceContainer struct {
 	Config *config.GeneralConfig
 
-	BaseMongoStore *datastore.MongoDatastore
-
-	UserMongoStore *datastore.UserMongoStore
+	UserService    service.UserService
+	BillingService service.BillingService
 }
 
+// Initialize and start up dependencies here
 func (container *DIServiceContainer) StartDependencyInjection() {
 
 	// Init mongodb
-	container.BaseMongoStore = datastore.New(&container.Config.MongoDbConfig)
+	baseMongoStore := datastore.New(&container.Config.MongoDbConfig)
 
 	// Datastore
-	container.UserMongoStore = datastore.NewUserMongoStore(container.BaseMongoStore)
+	userMongoStore := datastore.NewUserMongoStore(baseMongoStore)
+	billingMongoStore := datastore.NewBillingStore(baseMongoStore)
 
-	// Services
-
+	// Service
+	container.UserService = service.NewUserService(container.Config, userMongoStore)
+	container.BillingService = service.NewBillingService(container.Config, billingMongoStore)
 }

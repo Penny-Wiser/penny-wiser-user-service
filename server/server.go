@@ -2,12 +2,14 @@ package server
 
 import (
 	"github.com/chenlu-chua/penny-wiser/user-service/service"
+	"github.com/chenlu-chua/penny-wiser/user-service/svccontainer"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 )
 
 type Server interface {
-	GetRouter() *chi.Mux
+	Init(container *svccontainer.DIServiceContainer)
+	GetServer() *chi.Mux
 	RegisterHandlers() error
 }
 
@@ -17,7 +19,7 @@ type server struct {
 	billingService service.BillingService
 }
 
-func NewRouter() Server {
+func New() Server {
 	mux := chi.NewRouter()
 
 	// init middleware stack here
@@ -31,7 +33,12 @@ func NewRouter() Server {
 	}
 }
 
-func (s *server) GetRouter() *chi.Mux {
+func (s *server) Init(container *svccontainer.DIServiceContainer) {
+	s.userService = container.UserService
+	s.billingService = container.BillingService
+}
+
+func (s *server) GetServer() *chi.Mux {
 	return s.mux
 }
 
