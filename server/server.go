@@ -5,6 +5,7 @@ import (
 	"github.com/chenlu-chua/penny-wiser/user-service/svccontainer"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
+	"net/http"
 )
 
 type Server interface {
@@ -46,6 +47,10 @@ func (s *server) RegisterHandlers() error {
 
 	// Init routes here
 	s.mux.Route("/apis/v1", func(r chi.Router) {
+		r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(200)
+			w.Write([]byte("Hello World!"))
+		})
 		r.Post("/users/register", s.handleUserRegister())
 	})
 	return nil
